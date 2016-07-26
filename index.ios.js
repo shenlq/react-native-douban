@@ -13,6 +13,7 @@ import {
     TabBarIOS
 } from 'react-native';
 import Icons from './src/constants/icon';
+import MovieList from './src/views/movie'
 
 class reactNativeDouban extends Component {
     constructor(props){
@@ -52,9 +53,7 @@ class reactNativeDouban extends Component {
                     icon={{uri: Icons.movie, scale: 2.5}}
                     selected={tab === 'movie'}
                     onPress={() => this.pressTabHandle('movie')}>
-                    <View>
-                        <Text>电影</Text>
-                    </View>
+                    <MovieList/>
                 </TabBarIOS.Item>
                 <TabBarIOS.Item
                     title="音乐"
