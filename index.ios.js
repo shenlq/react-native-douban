@@ -12,8 +12,13 @@ import {
     View,
     TabBarIOS
 } from 'react-native';
+import { Provider } from 'react-redux';
+import configureStore from './src/store';
 import Icons from './src/constants/icon';
 import MovieList from './src/views/movie'
+
+const store = configureStore();
+
 
 class reactNativeDouban extends Component {
     constructor(props){
@@ -36,53 +41,55 @@ class reactNativeDouban extends Component {
         let { tab } = this.state;
 
         return (
-            <TabBarIOS barTintColor="white"
-                       unselectedTintColor="lightgray"
-                       tintColor="green">
-                <TabBarIOS.Item
-                    title="首页"
-                    icon={{uri: Icons.home, scale: 2.5}}
-                    selected={tab === 'home'}
-                    onPress={() => this.pressTabHandle('home')}>
-                    <View>
-                        <Text>首页</Text>
-                    </View>
-                </TabBarIOS.Item>
-                <TabBarIOS.Item
-                    title="电影"
-                    icon={{uri: Icons.movie, scale: 2.5}}
-                    selected={tab === 'movie'}
-                    onPress={() => this.pressTabHandle('movie')}>
-                    <MovieList/>
-                </TabBarIOS.Item>
-                <TabBarIOS.Item
-                    title="音乐"
-                    icon={{uri: Icons.music, scale: 2.5}}
-                    selected={tab === 'music'}
-                    onPress={() => this.pressTabHandle('music')}>
-                    <View>
-                        <Text>音乐</Text>
-                    </View>
-                </TabBarIOS.Item>
-                <TabBarIOS.Item
-                    title="图书"
-                    icon={{uri: Icons.book, scale: 2.5}}
-                    selected={tab === 'book'}
-                    onPress={() => this.pressTabHandle('book')}>
-                    <View>
-                        <Text>图书</Text>
-                    </View>
-                </TabBarIOS.Item>
-                <TabBarIOS.Item
-                    title="我的"
-                    icon={{uri: Icons.user, scale: 2.5}}
-                    selected={tab === 'user'}
-                    onPress={() => this.pressTabHandle('user')}>
-                    <View>
-                        <Text>我的</Text>
-                    </View>
-                </TabBarIOS.Item>
-            </TabBarIOS>
+            <Provider store={store}>
+                <TabBarIOS barTintColor="white"
+                           unselectedTintColor="lightgray"
+                           tintColor="green">
+                    <TabBarIOS.Item
+                        title="首页"
+                        icon={{uri: Icons.home, scale: 2.5}}
+                        selected={tab === 'home'}
+                        onPress={() => this.pressTabHandle('home')}>
+                        <View>
+                            <Text>首页</Text>
+                        </View>
+                    </TabBarIOS.Item>
+                    <TabBarIOS.Item
+                        title="电影"
+                        icon={{uri: Icons.movie, scale: 2.5}}
+                        selected={tab === 'movie'}
+                        onPress={() => this.pressTabHandle('movie')}>
+                        <MovieList/>
+                    </TabBarIOS.Item>
+                    <TabBarIOS.Item
+                        title="音乐"
+                        icon={{uri: Icons.music, scale: 2.5}}
+                        selected={tab === 'music'}
+                        onPress={() => this.pressTabHandle('music')}>
+                        <View>
+                            <Text>音乐</Text>
+                        </View>
+                    </TabBarIOS.Item>
+                    <TabBarIOS.Item
+                        title="图书"
+                        icon={{uri: Icons.book, scale: 2.5}}
+                        selected={tab === 'book'}
+                        onPress={() => this.pressTabHandle('book')}>
+                        <View>
+                            <Text>图书</Text>
+                        </View>
+                    </TabBarIOS.Item>
+                    <TabBarIOS.Item
+                        title="我的"
+                        icon={{uri: Icons.user, scale: 2.5}}
+                        selected={tab === 'user'}
+                        onPress={() => this.pressTabHandle('user')}>
+                        <View>
+                            <Text>我的</Text>
+                        </View>
+                    </TabBarIOS.Item>
+                </TabBarIOS>
+            </Provider>
         );
     }
 }
