@@ -5,7 +5,6 @@ import {
     Text,
     TextInput,
     Image,
-    TouchableOpacity,
     ListView
 } from 'react-native';
 import { bindActionCreators } from 'redux';
@@ -28,6 +27,8 @@ class Movie extends Component {
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             search: '古惑仔',
+            isLoading: false,
+            isPaging: false,
             movies: this.ds.cloneWithRows([]),
         };
     }
@@ -53,10 +54,17 @@ class Movie extends Component {
      * 电影列表底部渲染.
      */
     renderFooter = () => {
-        let { movies, movieCount } = this.props;
+        let { movies, movieCount } = this.props,
+            { isPaging } = this.state;
+
         //没有更多数据
         if(movies.length == movieCount){
             return <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>;
+        }
+
+        //刷新中
+        if(isPaging){
+            return <ListTipBar isLoading/>;
         }
 
         //上拉刷新
@@ -80,9 +88,25 @@ class Movie extends Component {
     searchMovieHandle = isConcat => {
         let { movies, getMovies } = this.props,
             { search } = this.state,
-            start = movies.length > 0 ? movies.length : 0;
+            start = isConcat && movies.length > 0 ? movies.length : 0;
 
-        getMovies(search, start, isConcat);
+        getMovies(search, start, isConcat).then(() => {
+            this.isPaging = false;
+            this.setState({
+                isLoading: false,
+                isPaging: false
+            });
+        });
+    }
+    /**
+     * 搜索按钮点击.
+     */
+    searchPressHandle = () => {
+        this.setState({
+            isLoading: true
+        });
+
+        this.searchMovieHandle();
     }
     /**
      * 拉到底部.
@@ -90,9 +114,15 @@ class Movie extends Component {
     onEndReachedHandle = () => {
         let { movies, movieCount } = this.props;
 
+        if(this.isPaging){
+            return false;
+        }
         //请求下一页
         if(movies.length < movieCount){
-            console.log('刷新');
+            this.isPaging = true;
+            this.setState({
+                isPaging: true
+            });
             this.searchMovieHandle(true);
         }
     }
@@ -100,19 +130,20 @@ class Movie extends Component {
      * 初始化.
      */
     componentDidMount(){
-        this.searchMovieHandle();
+        this.searchPressHandle();
     }
     render(){
         let { movies, movieCount } = this.props,
-            { search, showNoMoreInfo } = this.state;
+            { search, isLoading } = this.state;
 
         return (
             <View style={styles.container}>
                 <SearchBar
+                    isLoading={isLoading}
                     defaultValue={search}
                     placeholder="搜索电影/电视"
                     onChangeText={this.changeTextHandle}
-                    onPress={this.searchMovieHandle}/>
+                    onPress={this.searchPressHandle}/>
                 <ListView
                     style={{flex: 1}}
                     dataSource={this.ds.cloneWithRows(movies)}
@@ -132,6 +163,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    indicator: {
+        marginTop: 20,
+    }
 });
 
 

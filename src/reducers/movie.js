@@ -19,7 +19,6 @@ export default function reducer(state=init, action){
             movieCount: action.movieCount
         };
     case ActionType.MOVIE_CONCAT_QUERY: //电影列表翻页
-        console.log(state.movies, action.movies);
         return {
             ...state,
             movies: state.movies.concat(action.movies),

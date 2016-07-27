@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    ActivityIndicator
 } from 'react-native';
 
 /**
@@ -10,7 +11,18 @@ import {
  */
 export default class NoMoreBar extends Component {
     render(){
-        let { tip } = this.props;
+        let { tip, isLoading } = this.props;
+
+        if(isLoading){
+            return (
+                <View style={styles.noMore}>
+                    <View style={styles.line}/>
+                    <ActivityIndicator style={styles.indicator}/>
+                    <Text style={styles.text}>加载中</Text>
+                    <View style={styles.line}/>
+                </View>
+            );
+        }
 
         return (
             <View style={styles.noMore}>
@@ -42,6 +54,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingLeft: 10,
         paddingRight: 10,
+    },
+    indicator: {
+        marginLeft: 10,
     },
     line: {
         backgroundColor: '#eee',

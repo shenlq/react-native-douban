@@ -5,7 +5,8 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 
 /**
@@ -13,7 +14,7 @@ import {
  */
 export default class SearchBar extends Component {
     render(){
-        let { defaultValue, placeholder, onChangeText, onPress } = this.props;
+        let { defaultValue, placeholder, isLoading, onChangeText, onPress } = this.props;
 
         return (
             <View style={styles.search}>
@@ -28,7 +29,10 @@ export default class SearchBar extends Component {
                     clearButtonMode='while-editing'
                     placeholder={placeholder}/>
                 <TouchableOpacity style={styles.searchBtnGroup} activeOpacity={0.6}>
-                    <Text style={styles.searchBtn} onPress={onPress}>搜 索</Text>
+                    { isLoading?
+                        <ActivityIndicator/> :
+                        <Text style={styles.searchBtn} onPress={onPress}>搜 索</Text>
+                    }
                 </TouchableOpacity>
             </View>
         );
@@ -72,5 +76,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         borderRadius: 2,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
 });
