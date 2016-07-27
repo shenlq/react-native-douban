@@ -4,6 +4,7 @@ import {
     View,
     Text,
     Image,
+    TouchableOpacity
 } from 'react-native';
 
 /**
@@ -16,7 +17,7 @@ export default class MovieItem extends Component {
             directors = movie.directors.map(director => `${director.name}(导演)`).join("/");
 
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} activeOpacity={0.6}>
                 <View>
                     <Image source={{uri: movie.images.medium}} style={styles.image}/>
                 </View>
@@ -33,7 +34,7 @@ export default class MovieItem extends Component {
                         {`${directors}/${casts}`}
                     </Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     }
 };

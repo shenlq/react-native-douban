@@ -16,6 +16,7 @@ import Count from '../../components/Count';
 import SearchBar from '../../components/SearchBar';
 import ListTipBar from '../../components/ListTipBar';
 import MovieItem from './MovieItem';
+import MovieDetail from './MovieDetail';
 
 /**
  * 电影搜索列表页.
@@ -133,8 +134,12 @@ class Movie extends Component {
         this.searchPressHandle();
     }
     render(){
-        let { movies, movieCount } = this.props,
+        let { movies, movieCount, navigator } = this.props,
             { search, isLoading } = this.state;
+
+        return (
+            <MovieDetail/>
+        );
 
         return (
             <View style={styles.container}>

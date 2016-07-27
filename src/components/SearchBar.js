@@ -30,7 +30,7 @@ export default class SearchBar extends Component {
                     placeholder={placeholder}/>
                 <TouchableOpacity style={styles.searchBtnGroup} activeOpacity={0.6}>
                     { isLoading?
-                        <ActivityIndicator/> :
+                        <ActivityIndicator color="green"/> :
                         <Text style={styles.searchBtn} onPress={onPress}>搜 索</Text>
                     }
                 </TouchableOpacity>
