@@ -23,5 +23,5 @@ ES6
 
 ### 预览
 
-![https://github.com/shenlq](http://crms.imdada.cn/douban/0.0.1/images/douban1.jpg)
-![https://github.com/shenlq](http://crms.imdada.cn/douban/0.0.1/images/douban2.jpg)
+![https://github.com/shenlq](https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.jpg)
+![https://github.com/shenlq](https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.jpg)
