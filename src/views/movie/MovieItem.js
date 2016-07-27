@@ -10,14 +10,6 @@ import {
  * 电影项.
  */
 export default class MovieItem extends Component {
-    constructor(props){
-        super(props);
-
-        this.state = {
-
-        };
-    }
-
     render(){
         let { movie } = this.props,
             casts = movie.casts.map(cast => cast.name).join("/"),
@@ -33,9 +25,9 @@ export default class MovieItem extends Component {
                         {movie.title}
                     </Text>
                     <Text style={styles.desc}>
-                        {movie.genres.join('/')}
-                        /{movie.year}年
-                        <Text style={styles.rate}> 7.9分</Text>
+                        {movie.genres.join('/') || '未知'}
+                        /{movie.year || '-'}年
+                        <Text style={styles.rate}> {' ' + movie.rating.average || 0}分</Text>
                     </Text>
                     <Text style={styles.desc}>
                         {`${directors}/${casts}`}

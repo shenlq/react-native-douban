@@ -12,8 +12,10 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/movie';
 import { connect } from 'react-redux';
 import Icons from '../../constants/icon';
+import Constants from '../../constants';
 import Count from '../../components/Count';
 import SearchBar from '../../components/SearchBar';
+import ListTipBar from '../../components/ListTipBar';
 import MovieItem from './MovieItem';
 
 /**
@@ -25,7 +27,7 @@ class Movie extends Component {
 
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            search: '美国队长',
+            search: '古惑仔',
             movies: this.ds.cloneWithRows([]),
         };
     }
@@ -35,14 +37,39 @@ class Movie extends Component {
      * @param  {[Number]} index [索引]
      */
     renderRow = (movie, r, index) => {
-        let { movieCount } = this.props;
-        return index == 0? (
-                <View>
+        let { movies, movieCount } = this.props;
+
+        //统计信息
+        if(index == 0){
+            return (
+                 <View>
                     <Count count={movieCount} desc='电影'/>
-                    <MovieItem movie={movie} index={index} count={movieCount}/>
+                    <MovieItem movie={movie}/>
                 </View>
-            ) :
-        <MovieItem movie={movie} index={index} count={movieCount}/>;
+            );
+        }
+
+        //没有更多数据
+        if(index == movieCount - 1){
+            return (
+                <View>
+                    <MovieItem movie={movie}/>
+                    <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>
+                </View>
+            );
+        }
+
+        //上拉刷新
+        if(index == movies.length - 1 && index != movieCount - 1 ){
+            return (
+                <View>
+                    <MovieItem movie={movie}/>
+                    <ListTipBar tip={Constants.LIST_TIP_REFRESH}/>
+                </View>
+            );
+        }
+
+        return <MovieItem movie={movie}/>;
     }
     /**
      * 输入框内容变化.
@@ -55,17 +82,25 @@ class Movie extends Component {
     }
     /**
      * 查找电影.
+     * @param  {Boolean} isConcat [是否翻页]
      */
-    searchMovieHandle = () => {
-        let { getMovies } = this.props,
-            { search } = this.state;
+    searchMovieHandle = isConcat => {
+        let { movies, getMovies } = this.props,
+            { search } = this.state,
+            start = movies.length > 0 ? movies.length : 0;
 
-        getMovies(search);
+        getMovies(search, start, isConcat);
     }
+    /**
+     * 拉到底部.
+     */
     onEndReachedHandle = () => {
-        this.setState({
-            showNoMoreInfo: true
-        });
+        let { movies, movieCount } = this.props;
+
+        //请求下一页
+        if(movies.length < movieCount){
+            this.searchMovieHandle(true);
+        }
     }
     /**
      * 初始化.
@@ -81,6 +116,7 @@ class Movie extends Component {
             <View style={styles.container}>
                 <SearchBar
                     defaultValue={search}
+                    placeholder="搜索电影/电视"
                     onChangeText={this.changeTextHandle}
                     onPress={this.searchMovieHandle}/>
                 <ListView
@@ -100,18 +136,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    noMore: {
-        paddingTop: 20,
-        paddingBottom: 10,
-        borderTopWidth: 0.5,
-        borderTopColor: '#ddd',
-        paddingBottom: 70,
-    },
-    textCenter: {
-        color: '#999',
-        fontSize: 12,
-        textAlign: 'center',
-    }
 });
 
 

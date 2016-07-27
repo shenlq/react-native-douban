@@ -13,7 +13,7 @@ import {
  */
 export default class SearchBar extends Component {
     render(){
-        let { defaultValue, onChangeText, onPress } = this.props;
+        let { defaultValue, placeholder, onChangeText, onPress } = this.props;
 
         return (
             <View style={styles.search}>
@@ -26,7 +26,7 @@ export default class SearchBar extends Component {
                     defaultValue={defaultValue}
                     autoCapitalize='none'
                     clearButtonMode='while-editing'
-                    placeholder="搜索电影/电视"/>
+                    placeholder={placeholder}/>
                 <TouchableOpacity style={styles.searchBtnGroup} activeOpacity={0.6}>
                     <Text style={styles.searchBtn} onPress={onPress}>搜 索</Text>
                 </TouchableOpacity>
