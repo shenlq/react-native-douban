@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/movie';
 import { connect } from 'react-redux';
 import Icons from '../../constants/icon';
+import MovieItem from './MovieItem';
 
 /**
  * 电影列表页.
@@ -23,19 +24,18 @@ class Movie extends Component {
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             search: '美国队长',
-            movies: this.ds.cloneWithRows(['a', 'b', 'c']),
+            movies: this.ds.cloneWithRows([]),
         };
     }
     /**
      * 电影Item渲染.
      * @param  {[Object]} movie [电影]
+     * @param  {[Number]} index [索引]
      */
-    renderRow = movie => {
-        return (
-            <View>
-                <Text>{movie}</Text>
-            </View>
-        );
+    renderRow = (movie, r, index) => {
+        let { movieCount } = this.props;
+
+        return <MovieItem movie={movie} index={index} count={movieCount}/>;
     }
     /**
      * 输入框内容变化.
@@ -55,6 +55,11 @@ class Movie extends Component {
 
         getMovies(search);
     }
+    onEndReachedHandle = () => {
+        this.setState({
+            showNoMoreInfo: true
+        });
+    }
     /**
      * 初始化.
      */
@@ -62,8 +67,8 @@ class Movie extends Component {
         this.searchMovieHandle();
     }
     render(){
-        let { movieCount } = this.props,
-            { movies, search } = this.state;
+        let { movies, movieCount } = this.props,
+            { search, showNoMoreInfo } = this.state;
 
         return (
             <View style={styles.container}>
@@ -82,10 +87,13 @@ class Movie extends Component {
                         <Text style={styles.searchBtn} onPress={this.searchMovieHandle}>搜索</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{flex: 1}}>
-                    <Text style={styles.count}>共{movieCount}个电影</Text>
-                    <ListView dataSource={movies} renderRow={this.renderRow}/>
-                </View>
+                <ListView
+                    style={{flex: 1}}
+                    dataSource={this.ds.cloneWithRows(movies)}
+                    renderRow={this.renderRow}
+                    onEndReachedThreshold={1}
+                    onEndReached={this.onEndReachedHandle}
+                    enableEmptySections/>
             </View>
         );
     }
@@ -133,11 +141,17 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         borderRadius: 2,
     },
-    count: {
-        color: 'grey',
-        paddingTop: 10,
-        paddingLeft: 10,
+    noMore: {
+        paddingTop: 20,
+        paddingBottom: 10,
+        borderTopWidth: 0.5,
+        borderTopColor: '#ddd',
+        paddingBottom: 70,
+    },
+    textCenter: {
+        color: '#999',
         fontSize: 12,
+        textAlign: 'center',
     }
 });
 
