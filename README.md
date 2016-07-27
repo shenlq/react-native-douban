@@ -26,6 +26,8 @@ ES6
 <div>
     <image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.png" height="600"/>
 </div>
+<br/>
+<br/>
 <div>
     <image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.png" height="600"/>
 </div>
