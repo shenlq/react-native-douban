@@ -23,5 +23,5 @@ ES6
 
 ### 预览
 
-<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.jpg" height="120"/>
-<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.jpg" height="120"/>
+<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.png" height="600"/>
+<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.png" height="600"/>
