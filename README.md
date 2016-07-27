@@ -4,10 +4,10 @@
 
 ### 技术栈
 
-react: 15.2.1
-react-native: 0.30.0
-redux: 3.5.2
-ES6
+- react: 15.2.1
+- react-native: 0.30.0
+- redux: 3.5.2
+- ES6
 
 ### 安装
 
