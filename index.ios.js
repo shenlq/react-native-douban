@@ -10,16 +10,20 @@ import {
     StyleSheet,
     Text,
     View,
-    TabBarIOS
+    TabBarIOS,
+    Navigator
 } from 'react-native';
 import { Provider } from 'react-redux';
 import configureStore from './src/store';
 import Icons from './src/constants/icon';
-import MovieList from './src/views/movie'
+import MovieList from './src/views/movie';
+import * as Context from './src/utils/context';
 
 const store = configureStore();
 
-
+/**
+ * 入口.
+ */
 class reactNativeDouban extends Component {
     constructor(props){
         super(props);
@@ -44,7 +48,7 @@ class reactNativeDouban extends Component {
             <Provider store={store}>
                 <TabBarIOS barTintColor="white"
                            unselectedTintColor="lightgray"
-                           tintColor="green">
+                           tintColor="#40bd55">
                     <TabBarIOS.Item
                         title="首页"
                         icon={{uri: Icons.home, scale: 2.5}}
@@ -59,7 +63,9 @@ class reactNativeDouban extends Component {
                         icon={{uri: Icons.movie, scale: 2.5}}
                         selected={tab === 'movie'}
                         onPress={() => this.pressTabHandle('movie')}>
-                        <MovieList/>
+                            <Navigator
+                                initialRoute={{component: MovieList, index:0}}
+                                renderScene={(route, navigator) => Context.getComponent(route, navigator)}/>
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="音乐"

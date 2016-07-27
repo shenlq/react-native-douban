@@ -12,6 +12,7 @@ import * as actions from '../../actions/movie';
 import { connect } from 'react-redux';
 import Icons from '../../constants/icon';
 import Constants from '../../constants';
+import * as Context from '../../utils/context';
 import Count from '../../components/Count';
 import SearchBar from '../../components/SearchBar';
 import ListTipBar from '../../components/ListTipBar';
@@ -134,12 +135,8 @@ class Movie extends Component {
         this.searchPressHandle();
     }
     render(){
-        let { movies, movieCount, navigator } = this.props,
+        let { movies, movieCount } = this.props,
             { search, isLoading } = this.state;
-
-        return (
-            <MovieDetail/>
-        );
 
         return (
             <View style={styles.container}>

@@ -15,7 +15,9 @@ export default class NewWebView extends Component {
         return (
             <WebView
               startInLoadingState={true}
+              automaticallyAdjustContentInsets={false}
               style={{width: Utils.getWindowWidth()}}
+              contentInset={{bottom: 50}}
               source={{uri}}/>
         );
     }

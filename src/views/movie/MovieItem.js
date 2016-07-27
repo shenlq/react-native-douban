@@ -6,18 +6,35 @@ import {
     Image,
     TouchableOpacity
 } from 'react-native';
+import * as Context from '../../utils/context';
+import MovieDetail from './MovieDetail';
+
 
 /**
  * 电影项.
  */
 export default class MovieItem extends Component {
+    /**
+     * 电影详情.
+     */
+    goToDetailHandle = () => {
+        let { movie } = this.props;
+
+        Context.getNavigator().push({
+            component: MovieDetail,
+            params: {
+                url: movie.alt,
+                title: movie.title
+            }
+        });
+    }
     render(){
         let { movie } = this.props,
             casts = movie.casts.map(cast => cast.name).join("/"),
             directors = movie.directors.map(director => `${director.name}(导演)`).join("/");
 
         return (
-            <TouchableOpacity style={styles.container} activeOpacity={0.6}>
+            <TouchableOpacity onPress={this.goToDetailHandle} style={styles.container} activeOpacity={0.6}>
                 <View>
                     <Image source={{uri: movie.images.medium}} style={styles.image}/>
                 </View>
