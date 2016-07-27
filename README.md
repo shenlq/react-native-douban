@@ -23,7 +23,7 @@ ES6
 
 ### 预览
 
-<div>
+<div style="border:1px solid #ddd">
     <image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.png" height="600"/>
 </div>
 <br/>
