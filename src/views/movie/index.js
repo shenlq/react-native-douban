@@ -37,39 +37,32 @@ class Movie extends Component {
      * @param  {[Number]} index [索引]
      */
     renderRow = (movie, r, index) => {
+        let { movies } = this.props;
+
+        return <MovieItem movie={movie}/>;
+    }
+    /**
+     * 电影列表头部渲染.
+     */
+    renderHeader = () => {
+        let { movieCount } = this.props;
+
+        return <Count count={movieCount} desc='电影'/>;
+    }
+    /**
+     * 电影列表底部渲染.
+     */
+    renderFooter = () => {
         let { movies, movieCount } = this.props;
-
-        //统计信息
-        if(index == 0){
-            return (
-                 <View>
-                    <Count count={movieCount} desc='电影'/>
-                    <MovieItem movie={movie}/>
-                </View>
-            );
-        }
-
         //没有更多数据
-        if(index == movieCount - 1){
-            return (
-                <View>
-                    <MovieItem movie={movie}/>
-                    <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>
-                </View>
-            );
+        if(movies.length == movieCount){
+            return <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>;
         }
 
         //上拉刷新
-        if(index == movies.length - 1 && index != movieCount - 1 ){
-            return (
-                <View>
-                    <MovieItem movie={movie}/>
-                    <ListTipBar tip={Constants.LIST_TIP_REFRESH}/>
-                </View>
-            );
+        if(movies.length < movieCount ){
+            return <ListTipBar tip={Constants.LIST_TIP_REFRESH}/>;
         }
-
-        return <MovieItem movie={movie}/>;
     }
     /**
      * 输入框内容变化.
@@ -99,6 +92,7 @@ class Movie extends Component {
 
         //请求下一页
         if(movies.length < movieCount){
+            console.log('刷新');
             this.searchMovieHandle(true);
         }
     }
@@ -123,7 +117,9 @@ class Movie extends Component {
                     style={{flex: 1}}
                     dataSource={this.ds.cloneWithRows(movies)}
                     renderRow={this.renderRow}
-                    onEndReachedThreshold={1}
+                    renderHeader={this.renderHeader}
+                    renderFooter={this.renderFooter}
+                    onEndReachedThreshold={10}
                     onEndReached={this.onEndReachedHandle}
                     enableEmptySections/>
             </View>
