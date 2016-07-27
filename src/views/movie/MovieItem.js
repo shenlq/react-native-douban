@@ -56,12 +56,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.5,
         borderTopColor: '#ddd',
     },
-    count: {
-        color: '#c6c6c6',
-        paddingLeft: 10,
-        fontSize: 12,
-        paddingBottom: 10,
-    },
     image: {
         width: 65,
         height: 100,

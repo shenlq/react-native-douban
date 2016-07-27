@@ -12,10 +12,12 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/movie';
 import { connect } from 'react-redux';
 import Icons from '../../constants/icon';
+import Count from '../../components/Count';
+import SearchBar from '../../components/SearchBar';
 import MovieItem from './MovieItem';
 
 /**
- * 电影列表页.
+ * 电影搜索列表页.
  */
 class Movie extends Component {
     constructor(props){
@@ -34,8 +36,13 @@ class Movie extends Component {
      */
     renderRow = (movie, r, index) => {
         let { movieCount } = this.props;
-
-        return <MovieItem movie={movie} index={index} count={movieCount}/>;
+        return index == 0? (
+                <View>
+                    <Count count={movieCount} desc='电影'/>
+                    <MovieItem movie={movie} index={index} count={movieCount}/>
+                </View>
+            ) :
+        <MovieItem movie={movie} index={index} count={movieCount}/>;
     }
     /**
      * 输入框内容变化.
@@ -72,21 +79,10 @@ class Movie extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.search}>
-                    <View style={styles.searchIcon}>
-                        <Image style={styles.searchImg} source={require('../../images/search.png')}/>
-                    </View>
-                    <TextInput
-                        style={styles.searchInput}
-                        onChangeText={this.changeTextHandle}
-                        defaultValue={search}
-                        autoCapitalize='none'
-                        clearButtonMode='while-editing'
-                        placeholder="搜索电影/电视"/>
-                    <TouchableOpacity style={styles.searchBtnGroup} activeOpacity={0.6}>
-                        <Text style={styles.searchBtn} onPress={this.searchMovieHandle}>搜索</Text>
-                    </TouchableOpacity>
-                </View>
+                <SearchBar
+                    defaultValue={search}
+                    onChangeText={this.changeTextHandle}
+                    onPress={this.searchMovieHandle}/>
                 <ListView
                     style={{flex: 1}}
                     dataSource={this.ds.cloneWithRows(movies)}
@@ -103,43 +99,6 @@ class Movie extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    search: {
-        flexDirection:'row',
-        alignItems:'center',
-        borderTopWidth: 0.5,
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#ddd',
-        borderTopColor: '#ddd',
-        marginTop: 20,
-    },
-    searchInput: {
-        flex: 1,
-    },
-    searchIcon: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 15,
-        paddingBottom: 15,
-    },
-    searchImg: {
-        width: 15,
-        height: 15,
-    },
-    searchBtnGroup: {
-        paddingTop: 5,
-        paddingBottom: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
-    searchBtn: {
-        color: 'white',
-        backgroundColor: 'green',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 15,
-        paddingRight: 15,
-        borderRadius: 2,
     },
     noMore: {
         paddingTop: 20,
