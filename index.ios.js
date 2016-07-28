@@ -30,7 +30,7 @@ class reactNativeDouban extends Component {
         super(props);
 
         this.state = {
-            tab: 'book'
+            tab: 'movie'
         };
     }
     /**
