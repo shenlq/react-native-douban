@@ -9,13 +9,24 @@
 - redux: 3.5.2
 - ES6
 
-### 安装
+### 环境安装
+
+需要安装Xcode(通过App Store安装)、node、watchman和react native命令行。
+
+```
+    brew install node
+    brew install watchman
+
+    npm install -g react-native-cli
+```
+
+### 依赖安装
 
 ```
     npm install
 ```
 
-### 本地启动
+### 启动
 
 ```
     react-native run-ios
