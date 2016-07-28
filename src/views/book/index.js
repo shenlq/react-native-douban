@@ -10,26 +10,26 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Constants from '../../constants';
-import * as actions from '../../actions/music';
+import * as actions from '../../actions/book';
 import Count from '../../components/Count';
 import SearchBar from '../../components/SearchBar';
 import ListTipBar from '../../components/ListTipBar';
-import MusicItem from './MusicItem';
+import BookItem from './BookItem';
 
 
 /**
- * 音乐查找页.
+ * 图书查找页.
  */
-class Music extends Component {
+class Book extends Component {
     constructor(props){
         super(props);
 
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            search: '五月天',
+            search: '活法',
             isLoading: false,
             isPaging: false,
-            musics: this.ds.cloneWithRows([]),
+            books: this.ds.cloneWithRows([]),
         };
     }
     changeTextHandle = search => {
@@ -38,15 +38,15 @@ class Music extends Component {
         });
     }
     /**
-     * 查找音乐.
+     * 查找图书.
      * @param  {Boolean} isConcat [是否拼接]
      */
-    searchMusic = isConcat => {
-        let { musics, getMusics } = this.props,
+    searchBook = isConcat => {
+        let { books, getBooks } = this.props,
             { search } = this.state,
-            start = isConcat && musics.length > 0 ? musics.length : 0;
+            start = isConcat && books.length > 0 ? books.length : 0;
 
-        getMusics(search, start, isConcat).then(() => {
+        getBooks(search, start, isConcat).then(() => {
             this.isPaging = false;
             this.setState({
                 isLoading: false,
@@ -62,24 +62,24 @@ class Music extends Component {
             isLoading: true
         });
 
-        this.searchMusic();
+        this.searchBook();
     }
     /**
      * 拉到底部.
      */
     onEndReachedHandle = () => {
-        let { musics, musicCount } = this.props;
+        let { books, bookCount } = this.props;
 
         if(this.isPaging){
             return false;
         }
         //请求下一页
-        if(musics.length < musicCount){
+        if(books.length < bookCount){
             this.isPaging = true;
             this.setState({
                 isPaging: true
             });
-            this.searchMusic(true);
+            this.searchBook(true);
         }
     }
     /**
@@ -89,29 +89,29 @@ class Music extends Component {
         this.searchPressHandle();
     }
     /**
-     * 音乐项渲染.
-     * @param  {[Object]} music [音乐]
+     * 图书项渲染.
+     * @param  {[Object]} book [图书]
      */
-    renderRow = music => {
-        return <MusicItem music={music}/>;
+    renderRow = book => {
+        return <BookItem book={book}/>;
     }
     /**
-     * 音乐列表头部渲染.
+     * 图书列表头部渲染.
      */
     renderHeader = () => {
-        let { musicCount } = this.props;
+        let { bookCount } = this.props;
 
-        return <Count count={musicCount} desc='音乐'/>;
+        return <Count count={bookCount} desc='图书'/>;
     }
     /**
-     * 音乐列表底部渲染.
+     * 图书列表底部渲染.
      */
     renderFooter = () => {
-        let { musics, musicCount } = this.props,
+        let { books, bookCount } = this.props,
             { isPaging } = this.state;
 
         //没有更多数据
-        if(musics.length == musicCount){
+        if(books.length == bookCount){
             return <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>;
         }
 
@@ -121,25 +121,25 @@ class Music extends Component {
         }
 
         //上拉刷新
-        if(musics.length < musicCount ){
+        if(books.length < bookCount ){
             return <ListTipBar tip={Constants.LIST_TIP_REFRESH}/>;
         }
     }
     render() {
         let { search, isLoading } = this.state,
-            { musics } = this.props;
+            { books } = this.props;
 
         return (
             <View style={styles.container}>
                 <SearchBar
                     isLoading={isLoading}
                     defaultValue={search}
-                    placeholder="搜索音乐"
+                    placeholder="搜索图书"
                     onChangeText={this.changeTextHandle}
                     onPress={this.searchPressHandle}/>
                 <ListView
                     style={{flex: 1}}
-                    dataSource={this.ds.cloneWithRows(musics)}
+                    dataSource={this.ds.cloneWithRows(books)}
                     renderRow={this.renderRow}
                     renderHeader={this.renderHeader}
                     renderFooter={this.renderFooter}
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 
 
 export default connect(state => ({
-        musics: state.music.musics,
-        musicCount: state.music.musicCount,
+        books: state.book.books,
+        bookCount: state.book.bookCount,
     }), dispatch => bindActionCreators(actions, dispatch)
-)(Music);
+)(Book);

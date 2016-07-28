@@ -17,6 +17,7 @@ import configureStore from './src/store';
 import Icons from './src/constants/icon';
 import Movie from './src/views/movie';
 import Music from './src/views/music';
+import Book from './src/views/book';
 import Navigator from './src/components/Navigator';
 
 const store = configureStore();
@@ -29,7 +30,7 @@ class reactNativeDouban extends Component {
         super(props);
 
         this.state = {
-            tab: 'music'
+            tab: 'book'
         };
     }
     /**
@@ -77,9 +78,7 @@ class reactNativeDouban extends Component {
                         icon={{uri: Icons.book, scale: 2.5}}
                         selected={tab === 'book'}
                         onPress={() => this.pressTabHandle('book')}>
-                        <View>
-                            <Text>图书</Text>
-                        </View>
+                            <Navigator component={Book}/>
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="我的"
