@@ -11,44 +11,44 @@ import WebView from '../../components/WebView';
 
 
 /**
- * 电影项.
+ * 音乐项.
  */
-export default class MovieItem extends Component {
-    /**
-     * 电影详情.
-     */
+export default class MusicItem extends Component {
     goToDetailHandle = () => {
-        let { movie } = this.props;
+        let { music } = this.props;
 
         Context.getNavigator().push({
             component: WebView,
             params: {
-                url: movie.alt,
-                title: movie.title
+                url: music.mobile_link || music.alt,
+                title: music.title
             }
         });
     }
     render(){
-        let { movie } = this.props,
-            casts = movie.casts.map(cast => cast.name).join("/"),
-            directors = movie.directors.map(director => `${director.name}(导演)`).join("/");
+        let { music } = this.props,
+            authors = music.author? music.author.map(author => author.name).join('/') : '位置',
+            tags = music.tags? music.tags.map(tag => tag.name).join('/') : '';
 
+        console.log(music);
         return (
             <TouchableOpacity onPress={this.goToDetailHandle} style={styles.container} activeOpacity={0.6}>
                 <View>
-                    <Image source={{uri: movie.images.medium}} style={styles.image}/>
+                    <Image source={{uri: music.image}} style={styles.image}/>
                 </View>
                 <View style={styles.info}>
                     <Text style={styles.title}>
-                        {movie.title}
+                        {music.title}
                     </Text>
                     <Text style={styles.desc}>
-                        {movie.genres.join('/') || '未知'}
-                        /{movie.year || '-'}年
-                        <Text style={styles.rate}> {' ' + movie.rating.average || 0}分</Text>
+                       演唱：{authors}
                     </Text>
-                    <Text style={styles.desc}>
-                        {`${directors}/${casts}`}
+                    <Text style={styles.desc} numberOfLines={1} lineBreakMode='middle'>
+                        发布：{music.attrs.publisher && music.attrs.publisher.join(',') || '未知'}/
+                             {music.attrs.pubdate && music.attrs.pubdate.join(',') || '未知'}
+                    </Text>
+                    <Text style={styles.desc} numberOfLines={2} lineBreakMode='tail'>
+                        标签：{tags}
                     </Text>
                 </View>
             </TouchableOpacity>

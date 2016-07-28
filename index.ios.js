@@ -10,14 +10,14 @@ import {
     StyleSheet,
     Text,
     View,
-    TabBarIOS,
-    Navigator
+    TabBarIOS
 } from 'react-native';
 import { Provider } from 'react-redux';
 import configureStore from './src/store';
 import Icons from './src/constants/icon';
-import MovieList from './src/views/movie';
-import * as Context from './src/utils/context';
+import Movie from './src/views/movie';
+import Music from './src/views/music';
+import Navigator from './src/components/Navigator';
 
 const store = configureStore();
 
@@ -29,7 +29,7 @@ class reactNativeDouban extends Component {
         super(props);
 
         this.state = {
-            tab: 'movie'
+            tab: 'music'
         };
     }
     /**
@@ -63,18 +63,14 @@ class reactNativeDouban extends Component {
                         icon={{uri: Icons.movie, scale: 2.5}}
                         selected={tab === 'movie'}
                         onPress={() => this.pressTabHandle('movie')}>
-                            <Navigator
-                                initialRoute={{component: MovieList, index:0}}
-                                renderScene={(route, navigator) => Context.getComponent(route, navigator)}/>
+                            <Navigator component={Movie}/>
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="音乐"
                         icon={{uri: Icons.music, scale: 2.5}}
                         selected={tab === 'music'}
                         onPress={() => this.pressTabHandle('music')}>
-                        <View>
-                            <Text>音乐</Text>
-                        </View>
+                            <Navigator component={Music}/>
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="图书"

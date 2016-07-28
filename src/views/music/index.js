@@ -9,45 +9,107 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../../actions/movie';
 import Constants from '../../constants';
+import * as actions from '../../actions/music';
 import Count from '../../components/Count';
 import SearchBar from '../../components/SearchBar';
 import ListTipBar from '../../components/ListTipBar';
-import MovieItem from './MovieItem';
+import MusicItem from './MusicItem';
 
-/**
- * 电影搜索列表页.
- */
-class Movie extends Component {
+
+
+class Music extends Component {
     constructor(props){
         super(props);
 
         this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            search: '功夫',
+            search: '五月天',
             isLoading: false,
             isPaging: false,
-            movies: this.ds.cloneWithRows([]),
+            musics: this.ds.cloneWithRows([]),
         };
     }
-    /**
-     * 电影列表头部渲染.
-     */
-    renderHeader = () => {
-        let { movieCount } = this.props;
-
-        return <Count count={movieCount} desc='电影'/>;
+    changeTextHandle = search => {
+        this.setState({
+            search
+        });
     }
     /**
-     * 电影列表底部渲染.
+     * 查找音乐.
+     * @param  {Boolean} isConcat [是否拼接]
+     */
+    searchMusic = isConcat => {
+        let { musics, getMusics } = this.props,
+            { search } = this.state,
+            start = isConcat && musics.length > 0 ? musics.length : 0;
+
+        getMusics(search, start, isConcat).then(() => {
+            this.isPaging = false;
+            this.setState({
+                isLoading: false,
+                isPaging: false
+            });
+        });
+    }
+    /**
+     * 搜索点击.
+     */
+    searchPressHandle = () => {
+        this.setState({
+            isLoading: true
+        });
+
+        this.searchMusic();
+    }
+    /**
+     * 拉到底部.
+     */
+    onEndReachedHandle = () => {
+        let { musics, musicCount } = this.props;
+
+        if(this.isPaging){
+            return false;
+        }
+        //请求下一页
+        if(musics.length < musicCount){
+            this.isPaging = true;
+            this.setState({
+                isPaging: true
+            });
+            this.searchMusic(true);
+        }
+    }
+    /**
+     * 初始化.
+     */
+    componentDidMount(){
+        this.searchPressHandle();
+    }
+    /**
+     * 音乐项渲染.
+     * @param  {[Object]} music [音乐]
+     */
+    renderRow = music => {
+        return <MusicItem music={music}/>;
+    }
+    /**
+     * 音乐列表头部渲染.
+     */
+    renderHeader = () => {
+        let { musicCount } = this.props;
+
+        return <Count count={musicCount} desc='音乐'/>;
+    }
+    /**
+     * 音乐列表底部渲染.
      */
     renderFooter = () => {
-        let { movies, movieCount } = this.props,
+        let { musics, musicCount } = this.props,
             { isPaging } = this.state;
 
         //没有更多数据
-        if(movies.length == movieCount){
+        if(musics.length == musicCount){
             return <ListTipBar tip={Constants.LIST_TIP_NO_MORE}/>;
         }
 
@@ -57,96 +119,35 @@ class Movie extends Component {
         }
 
         //上拉刷新
-        if(movies.length < movieCount ){
+        if(musics.length < musicCount ){
             return <ListTipBar tip={Constants.LIST_TIP_REFRESH}/>;
         }
     }
-    /**
-     * 输入框内容变化.
-     * @param  {[String]} search [搜索关键词]
-     */
-    changeTextHandle = search => {
-        this.setState({
-            search
-        });
-    }
-    /**
-     * 查找电影.
-     * @param  {Boolean} isConcat [是否翻页]
-     */
-    searchMovieHandle = isConcat => {
-        let { movies, getMovies } = this.props,
-            { search } = this.state,
-            start = isConcat && movies.length > 0 ? movies.length : 0;
-
-        getMovies(search, start, isConcat).then(() => {
-            this.isPaging = false;
-            this.setState({
-                isLoading: false,
-                isPaging: false
-            });
-        });
-    }
-    /**
-     * 搜索按钮点击.
-     */
-    searchPressHandle = () => {
-        this.setState({
-            isLoading: true
-        });
-
-        this.searchMovieHandle();
-    }
-    /**
-     * 拉到底部.
-     */
-    onEndReachedHandle = () => {
-        let { movies, movieCount } = this.props;
-
-        if(this.isPaging){
-            return false;
-        }
-        //请求下一页
-        if(movies.length < movieCount){
-            this.isPaging = true;
-            this.setState({
-                isPaging: true
-            });
-            this.searchMovieHandle(true);
-        }
-    }
-    /**
-     * 初始化.
-     */
-    componentDidMount(){
-        this.searchPressHandle();
-    }
-    render(){
-        let { movies, movieCount } = this.props,
-            { search, isLoading } = this.state;
+    render() {
+        let { search, isLoading } = this.state,
+            { musics } = this.props;
 
         return (
             <View style={styles.container}>
                 <SearchBar
                     isLoading={isLoading}
                     defaultValue={search}
-                    placeholder="搜索电影/电视"
+                    placeholder="搜索音乐"
                     onChangeText={this.changeTextHandle}
                     onPress={this.searchPressHandle}/>
                 <ListView
                     style={{flex: 1}}
-                    dataSource={this.ds.cloneWithRows(movies)}
-                    renderRow={movie => <MovieItem movie={movie}/>}
+                    dataSource={this.ds.cloneWithRows(musics)}
+                    renderRow={this.renderRow}
                     renderHeader={this.renderHeader}
                     renderFooter={this.renderFooter}
-                    onEndReachedThreshold={1}
                     onEndReached={this.onEndReachedHandle}
+                    onEndReachedThreshold={1}
                     enableEmptySections/>
             </View>
         );
     }
-};
-
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -155,8 +156,9 @@ const styles = StyleSheet.create({
 });
 
 
+
 export default connect(state => ({
-        movies: state.movie.movies,
-        movieCount: state.movie.movieCount,
+        musics: state.music.musics,
+        musicCount: state.music.musicCount,
     }), dispatch => bindActionCreators(actions, dispatch)
-)(Movie);
+)(Music);

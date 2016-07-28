@@ -6,23 +6,23 @@ import * as ActionType from '../constants/ActionType';
  * @type {Object}
  */
 const init = {
-    movies:[],
-    movieCount: 0,
+    musics:[],
+    musicCount: 0,
 };
 
 export default function reducer(state=init, action){
     switch(action.type){
-    case ActionType.MOVIE_QUERY: //电影搜索
+    case ActionType.MUSIC_QUERY://音乐列表搜索
         return {
             ...state,
-            movies: action.movies,
-            movieCount: action.movieCount
+            musics: action.musics,
+            musicCount: action.musicCount
         };
-    case ActionType.MOVIE_CONCAT_QUERY: //电影列表翻页
+    case ActionType.MUSIC_CONCAT_QUERY://音乐列表翻页
         return {
             ...state,
-            movies: [...state.movies, ...action.movies],
-            movieCount: action.movieCount
+            musics: [...state.musics, ...action.musics],
+            musicCount: action.musicCount
         };
     default:
         return state;
