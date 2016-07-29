@@ -34,11 +34,10 @@
 
 ### 预览
 
-<div style="border:1px solid #ddd">
-    <image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.png" height="600"/>
-</div>
-<br/>
-<br/>
-<div>
-    <image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.png" height="600"/>
-</div>
+
+<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban0.png" height="600"/>
+
+<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban1.png" height="600"/>
+
+<image src="https://raw.githubusercontent.com/shenlq/react-native-douban/master/src/images/douban2.png" height="600"/>
+
